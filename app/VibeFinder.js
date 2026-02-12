@@ -318,7 +318,7 @@ export default function VibeFinder() {
         <div style={st.noise} />
         <div style={st.ambientOrb1} />
         <div style={st.ambientOrb2} />
-        <div style={{ ...st.container, display: "flex", flexDirection: "column", justifyContent: "center", minHeight: "100vh", textAlign: "center", padding: "40px 28px" }}>
+        <div style={{ ...st.container, display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "100vh", textAlign: "center", padding: "15vh 28px 40px" }}>
           <FadeIn delay={200}>
             <div style={{ fontSize: 64, marginBottom: 20 }}>🌿</div>
           </FadeIn>
