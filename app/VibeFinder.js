@@ -355,7 +355,7 @@ export default function VibeFinder() {
           <FadeIn delay={1200}>
             <div style={{ marginTop: 40, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
               <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#4ECDC4" }} />
-              <span style={{ fontSize: 11, color: "#5A5068" }}>Powered by The Human Variable research data</span>
+              <span style={{ fontSize: 11, color: "#5A5068" }}>Powered by Apiverde Health and UFCW 1189</span>
             </div>
           </FadeIn>
         </div>
@@ -597,7 +597,7 @@ export default function VibeFinder() {
                 </div>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 100, padding: "5px 14px", fontSize: 11, color: "#7A7189", fontWeight: 500 }}>
                   <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#4ECDC4" }} />
-                  Matched by The Human Variable research data
+                  Powered by Apiverde Health and UFCW 1189
                 </div>
               </div>
             </FadeIn>
