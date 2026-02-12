@@ -355,7 +355,7 @@ export default function VibeFinder() {
           <FadeIn delay={1200}>
             <div style={{ marginTop: 40, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
               <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#4ECDC4" }} />
-              <span style={{ fontSize: 11, color: "#5A5068" }}>Powered by Apiverde Health and UFCW 1189</span>
+              <span style={{ fontSize: 12, color: "#7A7189" }}>Powered by <span style={{ fontWeight: 700, color: "#9B90A8" }}>UFCW Bud Tenders</span> and <span style={{ fontWeight: 700, color: "#9B90A8" }}>Apiverde Health</span></span>
             </div>
           </FadeIn>
         </div>
@@ -595,14 +595,23 @@ export default function VibeFinder() {
                 <div style={st.sectionHint}>
                   Based on your {selectedVibe?.label.toLowerCase()} vibe · {EXPERIENCE_LEVELS.find(l => l.id === level)?.label} · {METHODS.find(m => m.id === method)?.label} · {TIMING.find(t => t.id === timing)?.label}
                 </div>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 100, padding: "5px 14px", fontSize: 11, color: "#7A7189", fontWeight: 500 }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 100, padding: "6px 16px", fontSize: 12, color: "#7A7189", fontWeight: 500 }}>
                   <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#4ECDC4" }} />
-                  Powered by Apiverde Health and UFCW 1189
+                  Powered by <span style={{ fontWeight: 700, color: "#9B90A8" }}>UFCW Bud Tenders</span>&nbsp;and&nbsp;<span style={{ fontWeight: 700, color: "#9B90A8" }}>Apiverde Health</span>
                 </div>
               </div>
             </FadeIn>
 
             {showBoth && <FadeIn delay={250}><div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7A7189", marginBottom: 16, paddingLeft: 4 }}>🌸 Flower</div></FadeIn>}
+
+            <FadeIn delay={showBoth ? 230 : 260}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 12, background: "rgba(78,205,196,0.04)", border: "1px solid rgba(78,205,196,0.12)", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
+                <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>🎓</span>
+                <div style={{ fontSize: 13, color: "#9B90A8", lineHeight: 1.55 }}>
+                  These picks are a great starting point — a <span style={{ fontWeight: 700, color: "#4ECDC4" }}>UFCW-trained budtender</span> can dial it in even further based on what's on the shelf and what they know works.
+                </div>
+              </div>
+            </FadeIn>
             {!showEdibles && renderStrainCards(300)}
             {showBoth && (
               <>
@@ -619,8 +628,11 @@ export default function VibeFinder() {
                   <span style={{ fontSize: 24 }}>🗣️</span>
                   <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", background: "linear-gradient(135deg, #FF6B6B, #FF8A5C)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Your Budtender Cheat Sheet</div>
                 </div>
-                <div style={{ fontFamily: "'Fraunces', serif", fontSize: 18, fontWeight: 800, color: "#F0EAF5", marginBottom: 12, lineHeight: 1.3 }}>
-                  {showEdibles ? "Not sure what's in stock? Show this to your budtender." : "Can't find these strains? Show this to your budtender."}
+                <div style={{ fontFamily: "'Fraunces', serif", fontSize: 18, fontWeight: 800, color: "#F0EAF5", marginBottom: 4, lineHeight: 1.3 }}>
+                  Take this to a UFCW-trained budtender
+                </div>
+                <div style={{ fontSize: 13, color: "#7A7189", marginBottom: 14, lineHeight: 1.4 }}>
+                  They'll know exactly how to work with this — and they might have something even better in mind.
                 </div>
                 <div style={{ fontSize: 14, color: "#B0A6BC", lineHeight: 1.7, marginBottom: 18, background: "rgba(255,255,255,0.02)", borderRadius: 12, padding: "16px 18px", borderLeft: "3px solid rgba(255,107,107,0.4)" }}>
                   "{budtenderScript}"
@@ -648,7 +660,8 @@ export default function VibeFinder() {
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: "linear-gradient(135deg, rgba(78,205,196,0.12), rgba(69,230,160,0.08))", border: "1px solid rgba(78,205,196,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>🏪</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 15, fontWeight: 700, color: "#F0EAF5" }}>Visit your local Green Goods</div>
-                    <div style={{ fontSize: 13, color: "#7A7189" }}>Union workers who know their craft</div>
+                    <div style={{ fontSize: 13, color: "#9B90A8", fontWeight: 500 }}>Home of UFCW-certified budtenders</div>
+                    <div style={{ fontSize: 12, color: "#7A7189", marginTop: 2 }}>Trained to match you with exactly what you're looking for</div>
                   </div>
                   <div style={{ fontSize: 18, color: "#5A5068" }}>→</div>
                 </div>
