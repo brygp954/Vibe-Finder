@@ -146,11 +146,15 @@ export default function VibeFinder() {
   const [checkinResponse, setCheckinResponse] = useState(null);
   const [transitioning, setTransitioning] = useState(false);
   const [shared, setShared] = useState(false);
+  const [showMoreStrains, setShowMoreStrains] = useState(false);
+  const [showMoreEdibles, setShowMoreEdibles] = useState(false);
+  const [expandedTerpenes, setExpandedTerpenes] = useState({});
   const containerRef = useRef(null);
 
   const reset = () => {
     setStep(0); setVibe(null); setLevel(null); setMethod(null);
     setTiming(null); setAvoid([]); setCheckinResponse(null); setShared(false);
+    setShowMoreStrains(false); setShowMoreEdibles(false); setExpandedTerpenes({});
   };
 
   const goNext = (nextStep) => {
@@ -373,8 +377,8 @@ export default function VibeFinder() {
 
   const renderEdibleCards = (delayStart) => (
     <>
-      {edibles.map((ed, i) => (
-        <FadeIn key={ed.name + i} delay={delayStart + i * 200}>
+      {edibles.slice(0, 1).map((ed, i) => (
+        <FadeIn key={ed.name + i} delay={delayStart}>
           <div style={st.resultCard}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
@@ -382,13 +386,11 @@ export default function VibeFinder() {
                 <div style={st.strainName}>{ed.icon} {ed.name}</div>
                 <div style={st.strainType}>{ed.leaning} · {ed.ratio}</div>
               </div>
-              {i === 0 && (
-                <div style={{
-                  background: "linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,138,92,0.1))",
-                  border: "1px solid rgba(255,107,107,0.3)", borderRadius: 10, padding: "6px 12px",
-                  fontSize: 11, fontWeight: 700, color: "#FF8A7A", letterSpacing: "0.05em", whiteSpace: "nowrap",
-                }}>TOP PICK</div>
-              )}
+              <div style={{
+                background: "linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,138,92,0.1))",
+                border: "1px solid rgba(255,107,107,0.3)", borderRadius: 10, padding: "6px 12px",
+                fontSize: 11, fontWeight: 700, color: "#FF8A7A", letterSpacing: "0.05em", whiteSpace: "nowrap",
+              }}>TOP PICK</div>
             </div>
             <div style={st.strainVibe}>"{ed.vibe}"</div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -404,8 +406,41 @@ export default function VibeFinder() {
           </div>
         </FadeIn>
       ))}
+
+      {!showMoreEdibles && edibles.length > 1 && (
+        <FadeIn delay={delayStart + 200}>
+          <button onClick={() => setShowMoreEdibles(true)} style={{
+            display: "block", width: "100%", padding: "12px 16px", marginBottom: 16,
+            background: "rgba(255,255,255,0.02)", border: "1.5px solid rgba(255,255,255,0.08)",
+            borderRadius: 14, color: "#9B90A8", fontSize: 14, fontWeight: 600,
+            cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s ease",
+          }}>See {edibles.length - 1} more picks ↓</button>
+        </FadeIn>
+      )}
+
+      {showMoreEdibles && edibles.slice(1).map((ed, i) => (
+        <FadeIn key={ed.name + i} delay={100 + i * 150}>
+          <div style={st.resultCard}>
+            <div style={st.matchBadge(ed.match)}>👤 {ed.match}% of people like you loved this</div>
+            <div style={st.strainName}>{ed.icon} {ed.name}</div>
+            <div style={st.strainType}>{ed.leaning} · {ed.ratio}</div>
+            <div style={st.strainVibe}>"{ed.vibe}"</div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ background: "rgba(78,205,196,0.1)", border: "1px solid rgba(78,205,196,0.25)", borderRadius: 10, padding: "8px 14px", flex: "1 1 auto", minWidth: 140 }}>
+                <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#4ECDC4", fontWeight: 700, marginBottom: 4 }}>Onset</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#ECE6F0" }}>{ed.onset}</div>
+              </div>
+              <div style={{ background: "rgba(196,113,237,0.1)", border: "1px solid rgba(196,113,237,0.25)", borderRadius: 10, padding: "8px 14px", flex: "1 1 auto", minWidth: 140 }}>
+                <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "#C471ED", fontWeight: 700, marginBottom: 4 }}>Duration</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#ECE6F0" }}>{ed.duration}</div>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      ))}
+
       {dosage && (
-        <FadeIn delay={delayStart + edibles.length * 200 + 100}>
+        <FadeIn delay={delayStart + 300}>
           <div style={{ ...st.resultCard, background: "linear-gradient(135deg, rgba(255,209,102,0.06) 0%, rgba(255,138,92,0.04) 100%)", border: "1.5px solid rgba(255,209,102,0.2)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
               <span style={{ fontSize: 24 }}>⚖️</span>
@@ -422,8 +457,8 @@ export default function VibeFinder() {
 
   const renderStrainCards = (delayStart) => (
     <>
-      {strains.map((strain, i) => (
-        <FadeIn key={strain.name} delay={delayStart + i * 200}>
+      {strains.slice(0, 1).map((strain) => (
+        <FadeIn key={strain.name} delay={delayStart}>
           <div style={st.resultCard}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
@@ -431,7 +466,7 @@ export default function VibeFinder() {
                 <div style={st.strainName}>{strain.name}</div>
                 <div style={st.strainType}>{strain.type} · THC {strain.thc}</div>
               </div>
-              {i === 0 && !showBoth && (
+              {!showBoth && (
                 <div style={{
                   background: "linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,138,92,0.1))",
                   border: "1px solid rgba(255,107,107,0.3)", borderRadius: 10, padding: "6px 12px",
@@ -440,15 +475,62 @@ export default function VibeFinder() {
               )}
             </div>
             <div style={st.strainVibe}>"{strain.vibe}"</div>
-            <div style={{ marginBottom: 6, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "#5A5068", fontWeight: 700 }}>Terpene Profile</div>
-            <div>
-              {strain.terpenes.map(t => (
-                <span key={t} style={st.terpTag(TERPENE_INFO[t]?.color || "#888")} title={TERPENE_INFO[t]?.note}>
-                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: TERPENE_INFO[t]?.color || "#888", flexShrink: 0 }} />
-                  {t}
-                </span>
-              ))}
+            <div
+              onClick={() => setExpandedTerpenes(prev => ({ ...prev, [strain.name]: !prev[strain.name] }))}
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", fontSize: 12, color: "#7A7189", fontWeight: 600, padding: "6px 0" }}
+            >
+              <span style={{ transition: "transform 0.2s", transform: expandedTerpenes[strain.name] ? "rotate(90deg)" : "rotate(0deg)" }}>▸</span>
+              Terpene profile
             </div>
+            {expandedTerpenes[strain.name] && (
+              <div style={{ marginTop: 8 }}>
+                {strain.terpenes.map(t => (
+                  <span key={t} style={st.terpTag(TERPENE_INFO[t]?.color || "#888")} title={TERPENE_INFO[t]?.note}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: TERPENE_INFO[t]?.color || "#888", flexShrink: 0 }} />
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </FadeIn>
+      ))}
+
+      {!showMoreStrains && strains.length > 1 && (
+        <FadeIn delay={delayStart + 200}>
+          <button onClick={() => setShowMoreStrains(true)} style={{
+            display: "block", width: "100%", padding: "12px 16px", marginBottom: 16,
+            background: "rgba(255,255,255,0.02)", border: "1.5px solid rgba(255,255,255,0.08)",
+            borderRadius: 14, color: "#9B90A8", fontSize: 14, fontWeight: 600,
+            cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s ease",
+          }}>See {strains.length - 1} more picks ↓</button>
+        </FadeIn>
+      )}
+
+      {showMoreStrains && strains.slice(1).map((strain, i) => (
+        <FadeIn key={strain.name} delay={100 + i * 150}>
+          <div style={st.resultCard}>
+            <div style={st.matchBadge(strain.match)}>👤 {strain.match}% of people like you loved this</div>
+            <div style={st.strainName}>{strain.name}</div>
+            <div style={st.strainType}>{strain.type} · THC {strain.thc}</div>
+            <div style={st.strainVibe}>"{strain.vibe}"</div>
+            <div
+              onClick={() => setExpandedTerpenes(prev => ({ ...prev, [strain.name]: !prev[strain.name] }))}
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", fontSize: 12, color: "#7A7189", fontWeight: 600, padding: "6px 0" }}
+            >
+              <span style={{ transition: "transform 0.2s", transform: expandedTerpenes[strain.name] ? "rotate(90deg)" : "rotate(0deg)" }}>▸</span>
+              Terpene profile
+            </div>
+            {expandedTerpenes[strain.name] && (
+              <div style={{ marginTop: 8 }}>
+                {strain.terpenes.map(t => (
+                  <span key={t} style={st.terpTag(TERPENE_INFO[t]?.color || "#888")} title={TERPENE_INFO[t]?.note}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: TERPENE_INFO[t]?.color || "#888", flexShrink: 0 }} />
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </FadeIn>
       ))}
@@ -589,10 +671,10 @@ export default function VibeFinder() {
             <button style={st.backBtn} onClick={reset}>← Start over</button>
 
             <FadeIn delay={100}>
-              <div style={{ textAlign: "center", marginBottom: 36 }}>
+              <div style={{ textAlign: "center", marginBottom: 28 }}>
                 <div style={{ fontSize: 44, marginBottom: 12 }}>{selectedVibe?.emoji}</div>
                 <div style={st.sectionQ}>Here's what we'd reach for</div>
-                <div style={st.sectionHint}>
+                <div style={{ fontSize: 14, color: "#7A7189", marginBottom: 16, lineHeight: 1.5 }}>
                   Based on your {selectedVibe?.label.toLowerCase()} vibe · {EXPERIENCE_LEVELS.find(l => l.id === level)?.label} · {METHODS.find(m => m.id === method)?.label} · {TIMING.find(t => t.id === timing)?.label}
                 </div>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 100, padding: "6px 16px", fontSize: 12, color: "#7A7189", fontWeight: 500 }}>
@@ -603,15 +685,6 @@ export default function VibeFinder() {
             </FadeIn>
 
             {showBoth && <FadeIn delay={250}><div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#7A7189", marginBottom: 16, paddingLeft: 4 }}>🌸 Flower</div></FadeIn>}
-
-            <FadeIn delay={showBoth ? 230 : 260}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 12, background: "rgba(78,205,196,0.04)", border: "1px solid rgba(78,205,196,0.12)", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
-                <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>🎓</span>
-                <div style={{ fontSize: 13, color: "#9B90A8", lineHeight: 1.55 }}>
-                  These picks are a great starting point — a <span style={{ fontWeight: 700, color: "#4ECDC4" }}>UFCW-trained budtender</span> can dial it in even further based on what's on the shelf and what they know works.
-                </div>
-              </div>
-            </FadeIn>
             {!showEdibles && renderStrainCards(300)}
             {showBoth && (
               <>
@@ -621,7 +694,7 @@ export default function VibeFinder() {
             )}
             {showEdibles && renderEdibleCards(300)}
 
-            {/* Budtender Cheat Sheet */}
+            {/* Budtender Cheat Sheet — merged with UFCW callout */}
             <FadeIn delay={budtenderDelay}>
               <div style={{ ...st.resultCard, background: "linear-gradient(135deg, rgba(255,107,107,0.06) 0%, rgba(196,113,237,0.04) 50%, rgba(78,205,196,0.04) 100%)", border: "1.5px solid rgba(255,107,107,0.18)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
@@ -632,27 +705,35 @@ export default function VibeFinder() {
                   Take this to a UFCW-trained budtender
                 </div>
                 <div style={{ fontSize: 13, color: "#7A7189", marginBottom: 14, lineHeight: 1.4 }}>
-                  They'll know exactly how to work with this — and they might have something even better in mind.
+                  These picks are a great starting point — they can dial it in even further.
                 </div>
                 <div style={{ fontSize: 14, color: "#B0A6BC", lineHeight: 1.7, marginBottom: 18, background: "rgba(255,255,255,0.02)", borderRadius: 12, padding: "16px 18px", borderLeft: "3px solid rgba(255,107,107,0.4)" }}>
                   "{budtenderScript}"
                 </div>
                 {!showEdibles && (
-                  <div style={{ marginBottom: 14 }}>
-                    <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "#5A5068", fontWeight: 700, marginBottom: 8 }}>Look for these terpenes</div>
-                    <div>
-                      {(selectedVibe?.id === "unwind" ? ["Myrcene", "Caryophyllene", "Linalool"] :
-                        selectedVibe?.id === "social" ? ["Limonene", "Caryophyllene", "Myrcene"] :
-                        selectedVibe?.id === "creative" ? ["Pinene", "Limonene", "Terpinolene"] :
-                        selectedVibe?.id === "focused" ? ["Pinene", "Limonene", "Caryophyllene"] :
-                        selectedVibe?.id === "explore" ? ["Caryophyllene", "Linalool", "Myrcene"] :
-                        ["Limonene", "Caryophyllene", "Humulene"]).map(t => (
-                        <span key={t} style={st.terpTag(TERPENE_INFO[t]?.color || "#888")}>
-                          <span style={{ width: 6, height: 6, borderRadius: "50%", background: TERPENE_INFO[t]?.color || "#888", flexShrink: 0 }} />
-                          {t} — {TERPENE_INFO[t]?.note}
-                        </span>
-                      ))}
+                  <div
+                    onClick={() => setExpandedTerpenes(prev => ({ ...prev, _cheatsheet: !prev._cheatsheet }))}
+                    style={{ cursor: "pointer", marginBottom: expandedTerpenes._cheatsheet ? 14 : 0 }}
+                  >
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: "#7A7189", fontWeight: 600, padding: "6px 0" }}>
+                      <span style={{ transition: "transform 0.2s", transform: expandedTerpenes._cheatsheet ? "rotate(90deg)" : "rotate(0deg)" }}>▸</span>
+                      Terpenes to look for
                     </div>
+                    {expandedTerpenes._cheatsheet && (
+                      <div style={{ marginTop: 8 }}>
+                        {(selectedVibe?.id === "unwind" ? ["Myrcene", "Caryophyllene", "Linalool"] :
+                          selectedVibe?.id === "social" ? ["Limonene", "Caryophyllene", "Myrcene"] :
+                          selectedVibe?.id === "creative" ? ["Pinene", "Limonene", "Terpinolene"] :
+                          selectedVibe?.id === "focused" ? ["Pinene", "Limonene", "Caryophyllene"] :
+                          selectedVibe?.id === "explore" ? ["Caryophyllene", "Linalool", "Myrcene"] :
+                          ["Limonene", "Caryophyllene", "Humulene"]).map(t => (
+                          <span key={t} style={st.terpTag(TERPENE_INFO[t]?.color || "#888")}>
+                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: TERPENE_INFO[t]?.color || "#888", flexShrink: 0 }} />
+                            {t} — {TERPENE_INFO[t]?.note}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
                 <div style={st.divider} />
@@ -661,42 +742,30 @@ export default function VibeFinder() {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 15, fontWeight: 700, color: "#F0EAF5" }}>Visit your local Green Goods</div>
                     <div style={{ fontSize: 13, color: "#9B90A8", fontWeight: 500 }}>Home of UFCW-certified budtenders</div>
-                    <div style={{ fontSize: 12, color: "#7A7189", marginTop: 2 }}>Trained to match you with exactly what you're looking for</div>
                   </div>
                   <div style={{ fontSize: 18, color: "#5A5068" }}>→</div>
                 </div>
               </div>
             </FadeIn>
 
-            {/* Check-in */}
+            {/* Compact Check-in */}
             <FadeIn delay={budtenderDelay + 200}>
-              <div style={{ ...st.resultCard, background: "linear-gradient(135deg, rgba(78,205,196,0.06) 0%, rgba(69,230,160,0.03) 100%)", border: "1.5px solid rgba(78,205,196,0.18)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                  <span style={{ fontSize: 24 }}>🔄</span>
-                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#4ECDC4" }}>Help Us Get Smarter</div>
+              {!checkinResponse ? (
+                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(78,205,196,0.04)", border: "1px solid rgba(78,205,196,0.12)", borderRadius: 14, padding: "12px 16px", marginBottom: 16 }}>
+                  <span style={{ fontSize: 16, flexShrink: 0 }}>🔄</span>
+                  <div style={{ flex: 1, fontSize: 13, color: "#9B90A8", lineHeight: 1.4 }}>Can we check in and see how it worked out? <span style={{ color: "#7A7189" }}>It makes us smarter.</span></div>
+                  <button onClick={() => setCheckinResponse("yes")} style={{ flexShrink: 0, padding: "8px 14px", borderRadius: 10, border: "none", background: "rgba(78,205,196,0.15)", color: "#4ECDC4", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", whiteSpace: "nowrap" }}>Count me in</button>
                 </div>
-                <div style={{ fontFamily: "'Fraunces', serif", fontSize: 18, fontWeight: 800, color: "#F0EAF5", marginBottom: 10, lineHeight: 1.3 }}>Can we check in after you try it?</div>
-                <div style={{ fontSize: 14, color: "#B0A6BC", lineHeight: 1.65, marginBottom: 20 }}>A quick follow-up helps us learn what's actually working for people like you — so the next recommendation is even better. No spam, just one quick check-in.</div>
-                {!checkinResponse ? (
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button onClick={() => setCheckinResponse("yes")} style={{ flex: 1, padding: "14px 16px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg, rgba(78,205,196,0.2), rgba(69,230,160,0.12))", color: "#4ECDC4", fontSize: 14, fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Yeah, check in with me</button>
-                    <button onClick={() => setCheckinResponse("no")} style={{ flex: 1, padding: "14px 16px", borderRadius: 12, border: "1.5px solid rgba(255,255,255,0.08)", cursor: "pointer", background: "transparent", color: "#7A7189", fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Maybe next time</button>
-                  </div>
-                ) : checkinResponse === "yes" ? (
-                  <div style={{ background: "rgba(78,205,196,0.08)", borderRadius: 12, padding: "16px 18px", borderLeft: "3px solid rgba(78,205,196,0.4)" }}>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: "#4ECDC4", marginBottom: 4 }}>You're in 🙌</div>
-                    <div style={{ fontSize: 13, color: "#9B90A8", lineHeight: 1.5 }}>We'll send a quick check-in after you've had a chance to try your pick. Your feedback makes the recommendations better for everyone.</div>
-                  </div>
-                ) : (
-                  <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 12, padding: "16px 18px" }}>
-                    <div style={{ fontSize: 13, color: "#7A7189", lineHeight: 1.5 }}>No worries — you can always come back and share your experience later. Enjoy! ✌️</div>
-                  </div>
-                )}
-              </div>
+              ) : (
+                <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(78,205,196,0.04)", border: "1px solid rgba(78,205,196,0.12)", borderRadius: 14, padding: "12px 16px", marginBottom: 16 }}>
+                  <span style={{ fontSize: 14 }}>✓</span>
+                  <div style={{ fontSize: 13, color: "#4ECDC4", fontWeight: 600 }}>You're in — we'll check in after you try it 🙌</div>
+                </div>
+              )}
             </FadeIn>
 
             {/* Share + Start Over */}
-            <FadeIn delay={budtenderDelay + 400}>
+            <FadeIn delay={budtenderDelay + 300}>
               <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
                 <button onClick={handleShare} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 16px", borderRadius: 14, border: "1.5px solid rgba(255,107,107,0.3)", background: "rgba(255,107,107,0.06)", color: "#FF8A7A", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s ease" }}>
                   {shared ? "✓ Copied!" : "📤 Share my picks"}
@@ -707,8 +776,8 @@ export default function VibeFinder() {
               </div>
             </FadeIn>
 
-            <FadeIn delay={budtenderDelay + 500}>
-              <div style={{ textAlign: "center", marginTop: 12, fontSize: 12, color: "#4A4358", lineHeight: 1.6 }}>
+            <FadeIn delay={budtenderDelay + 400}>
+              <div style={{ textAlign: "center", marginTop: 4, fontSize: 12, color: "#4A4358", lineHeight: 1.6 }}>
                 Recommendations are personalized suggestions, not medical advice.<br />
                 Always start low and go slow{showEdibles || showBoth ? " — edibles take longer to kick in than you expect" : ", especially with new strains"}.
               </div>
@@ -721,13 +790,16 @@ export default function VibeFinder() {
   };
 
   return (
-    <div style={st.app} ref={containerRef}>
-      <div style={st.noise} />
-      <div style={st.ambientOrb1} />
-      <div style={st.ambientOrb2} />
-      <div style={st.container}>
-        {renderStep()}
+    <>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet" />
+      <div style={st.app} ref={containerRef}>
+        <div style={st.noise} />
+        <div style={st.ambientOrb1} />
+        <div style={st.ambientOrb2} />
+        <div style={st.container}>
+          {renderStep()}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
