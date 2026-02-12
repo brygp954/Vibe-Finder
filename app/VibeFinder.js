@@ -175,7 +175,7 @@ export default function VibeFinder() {
   };
 
   const handleShare = async () => {
-    const text = `🌿 Find Your Vibe matched me with cannabis picks for my "${selectedVibe?.label}" mood. Check it out:`;
+    const text = `🌿 Check out Find Your Vibe — it matches you with the perfect cannabis experience based on what you're looking for.`;
     if (navigator.share) {
       try {
         await navigator.share({ title: "Find Your Vibe", text, url: window.location.href });
@@ -768,7 +768,7 @@ export default function VibeFinder() {
             <FadeIn delay={budtenderDelay + 300}>
               <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
                 <button onClick={handleShare} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 16px", borderRadius: 14, border: "1.5px solid rgba(255,107,107,0.3)", background: "rgba(255,107,107,0.06)", color: "#FF8A7A", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s ease" }}>
-                  {shared ? "✓ Copied!" : "📤 Share my picks"}
+                  {shared ? "✓ Copied!" : "📤 Share this app"}
                 </button>
                 <button onClick={reset} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 16px", borderRadius: 14, border: "1.5px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", color: "#9B90A8", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s ease" }}>
                   🔄 New vibe
